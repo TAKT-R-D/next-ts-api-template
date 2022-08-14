@@ -1,0 +1,364 @@
+openapi: 3.1.0
+info:
+  title: API TEMPLATE
+  version: '1.0'
+  contact:
+    name: kurab
+    url: https://github.com/TAKT-R-D
+    email: kura@takt.dev
+  termsOfService: https://github.com/TAKT-R-D
+  license:
+    name: MIT
+    url: https://github.com/TAKT-R-D
+servers:
+  - url: http://localhost:3000/api
+    description: develop
+paths:
+  /hello:
+    get:
+      summary: /hello
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/getHello'
+      operationId: get-hello
+      description: hello API
+  /auth/access_token:
+    post:
+      summary: /auth/access_token
+      operationId: post-auth-access_token
+      responses:
+        '200':
+          $ref: '#/components/responses/getAccessToken'
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/err400'
+        '401':
+          $ref: '#/components/responses/err401'
+        '405':
+          $ref: '#/components/responses/err405'
+        '500':
+          $ref: '#/components/responses/err500'
+      description: issue access_token
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              type: object
+              properties:
+                secret:
+                  type: string
+                userId:
+                  type: string
+            examples:
+              example-1:
+                value:
+                  secret: SET_YOUR_API_SECRET
+                  userId: 897f2ddf-eb33-4b6e-a74f-1c045e3d61d9
+      tags:
+        - auth
+  /auth/register:
+    post:
+      summary: /auth/register
+      operationId: post-auth-register
+      responses:
+        '200':
+          $ref: '#/components/responses/getAccessToken'
+        '400':
+          $ref: '#/components/responses/err400'
+        '401':
+          $ref: '#/components/responses/err401'
+        '405':
+          $ref: '#/components/responses/err405'
+        '500':
+          $ref: '#/components/responses/err500'
+      description: register user
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              type: object
+              properties:
+                secret:
+                  type: string
+                name:
+                  type: string
+            examples:
+              example-1:
+                value:
+                  secret: SET_YOUR_API_SECRET
+                  name: Sample User
+      tags:
+        - auth
+  /users:
+    get:
+      summary: /users
+      tags:
+        - users
+      responses:
+        '200':
+          $ref: '#/components/responses/getUser'
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/err401'
+        '405':
+          $ref: '#/components/responses/err405'
+        '406':
+          $ref: '#/components/responses/err406'
+        '500':
+          $ref: '#/components/responses/err500'
+      operationId: get-users
+      description: get user list
+      security:
+        - access_token: []
+    options:
+      summary: /users
+      operationId: options-users
+      responses:
+        '204':
+          description: No Content
+      description: CORS
+      tags:
+        - users
+  /users/{userId}:
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        example: 897f2ddf-eb33-4b6e-a74f-1c045e3d61d9
+        in: path
+        description: userId
+        required: true
+    get:
+      summary: /users/{userId}
+      tags:
+        - users
+      responses:
+        '200':
+          $ref: '#/components/responses/getUser'
+        '401':
+          $ref: '#/components/responses/err401'
+        '404':
+          $ref: '#/components/responses/err404'
+        '405':
+          $ref: '#/components/responses/err405'
+        '406':
+          $ref: '#/components/responses/err406'
+        '500':
+          $ref: '#/components/responses/err500'
+      operationId: get-users-userId
+      description: get user detail
+      security:
+        - access_token: []
+    put:
+      summary: /users/{userId}
+      operationId: put-users-userId
+      responses:
+        '200':
+          $ref: '#/components/responses/getUser'
+        '401':
+          $ref: '#/components/responses/err401'
+        '404':
+          $ref: '#/components/responses/err404'
+        '405':
+          $ref: '#/components/responses/err405'
+        '406':
+          $ref: '#/components/responses/err406'
+        '500':
+          $ref: '#/components/responses/err500'
+      description: update user detail info
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+            examples:
+              example-1:
+                value:
+                  name: New User Name
+                  description: New User Description
+        description: ''
+      tags:
+        - users
+    delete:
+      summary: /users/{userId}
+      operationId: delete-users-userId
+      responses:
+        '204':
+          description: No Content
+        '500':
+          $ref: '#/components/responses/err500'
+      description: delete user
+      tags:
+        - users
+    options:
+      summary: /users/{userId}
+      operationId: options-users-userId
+      responses:
+        '204':
+          description: No Content
+      description: CORS
+      tags:
+        - users
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      properties:
+        id:
+          type: number
+        userId:
+          type: string
+        name:
+          type: string
+        description:
+          type:
+            - string
+            - 'null'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      examples:
+        - id: 0
+          userId: 897f2ddf-eb33-4b6e-a74f-1c045e3d61d9
+          name: Sample User
+          description: Sample Description
+          createdAt: '2019-08-24T14:15:22Z'
+          updatedAt: '2019-08-24T14:15:22Z'
+      description: User Model
+  securitySchemes:
+    access_token:
+      type: http
+      scheme: bearer
+  responses:
+    getHello:
+      description: Example response
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+          examples:
+            example-1:
+              value:
+                name: John Doe
+    getAccessToken:
+      description: Example response
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              access_token:
+                type: string
+          examples:
+            example-1:
+              value:
+                access_token: >-
+                  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4OTdmMmRkZi1lYjMzLTRiNmUtYTc0Zi0xYzA0NWUzZDYxZDkiLCJ1c2VyTmFtZSI6IlNRRVggQVJGIiwiaWF0IjoxNjYwMjIwMTMyLCJleHAiOjE2NjAyNDE3MzJ9.PrLfi_-o0sVnN078zRcrY7ZwSp1o_I-282fN7MXcU2o
+    getUsers:
+      description: Example response
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+    getUser:
+      description: Example response
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/User'
+    err400:
+      description: Example response
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+          examples:
+            example-1:
+              value:
+                error: Bad Request
+    err401:
+      description: Example response
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+          examples:
+            example-1:
+              value:
+                error: Unauthorized
+    err500:
+      description: Example response
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+          examples:
+            example-1:
+              value:
+                error: Internal Server Error
+    err404:
+      description: Example response
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+          examples:
+            example-1:
+              value:
+                error: Not Found
+    err405:
+      description: Example response
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+          examples:
+            example-1:
+              value:
+                error: Method not allowed
+    err406:
+      description: Example response
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+          examples:
+            example-1:
+              value:
+                error: Not Acceptable
+  requestBodies: {}
