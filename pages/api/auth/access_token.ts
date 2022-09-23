@@ -37,13 +37,14 @@ const postHandler = async (
   return res.status(200).json({ access_token });
 };
 
-const handler: NextApiHandler = (req, res) => {
+const handler: NextApiHandler = async (req, res) => {
   switch (req.method) {
     case 'POST':
-      postHandler(req, res);
+      await postHandler(req, res);
       break;
     default:
-      return res.status(405).json(err405);
+      return await res.status(405).json(err405);
+      break;
   }
 };
 

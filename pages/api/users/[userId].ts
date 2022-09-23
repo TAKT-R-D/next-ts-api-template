@@ -83,22 +83,23 @@ const deleteHandler = async (
   return res.status(statusCode).json(resBody);
 };
 
-const handler: NextApiHandlerWithUserId = (
+const handler: NextApiHandlerWithUserId = async (
   req: NextApiRequestWithUserId,
   res: NextApiResponse
 ) => {
   switch (req.method) {
     case 'GET':
-      getHandler(req, res);
+      await getHandler(req, res);
       break;
     case 'PUT':
-      putHandler(req, res);
+      await putHandler(req, res);
       break;
     case 'DELETE':
-      deleteHandler(req, res);
+      await deleteHandler(req, res);
       break;
     default:
-      return res.status(405).json(err405);
+      return await res.status(405).json(err405);
+      break;
   }
 };
 

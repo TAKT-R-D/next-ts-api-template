@@ -28,16 +28,17 @@ const getHandler = async (
   return res.status(statusCode).json(resBody);
 };
 
-const handler: NextApiHandlerWithUserId = (
+const handler: NextApiHandlerWithUserId = async (
   req: NextApiRequestWithUserId,
   res: NextApiResponse
 ) => {
   switch (req.method) {
     case 'GET':
-      getHandler(req, res);
+      await getHandler(req, res);
       break;
     default:
-      return res.status(405).json(err405);
+      return await res.status(405).json(err405);
+      break;
   }
 };
 

@@ -50,5 +50,6 @@ export const authenticated = (handler: AuthenticatedNextApiHandler) => {
         }
       }
     );
+    return handler(req, res);
   };
 };
